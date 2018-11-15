@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/home"
+            android:title="Home" />
+        <item
+            android:id="@+id/nav_reg_pump"
+            android:icon="@drawable/reg_pump"
+            android:title="Register Pump House" />
+        <item
+            android:id="@+id/nav_setAlarm"
+            android:icon="@drawable/add_alarm"
+            android:title="Set Alarm" />
+        <item
+            android:id="@+id/nav_Cancel"
+            android:icon="@drawable/alarm_off"
+            android:title="Cancel" />
+
+
+    </group>
+
+
+    <item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_gsheet"
+                android:icon="@drawable/sheet"
+                android:title="Google Sheet" />
+
+
+
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Share" />
+            <item
+                android:id="@+id/nav_EXIT"
+                android:icon="@drawable/exit_to_app"
+                android:title="Exit" />
+
+
+        </menu>
+    </item>
+</menu>
