@@ -46,7 +46,7 @@ public class DbManager extends SQLiteOpenHelper {
                 + TIME_OFF +" text unique," +
                 "FOREIGN KEY ("+ MOBILE_NO +") REFERENCES " + TABLE_REG + "(" + MOBILE_NO+") )");
 
-        db.execSQL("create table "+ TABLE_REG + "(" + ID + " integer  ,"
+        db.execSQL("create table "+ TABLE_REG + "(" + ID + " integer autoincrement ,"
                 + MOBILE_NO + "text primary key  ,"
                 + SHEET_ID + " text ) " );
     }
@@ -125,10 +125,14 @@ public class DbManager extends SQLiteOpenHelper {
         }
 
     }
-    public Cursor CheckNumber(String no) {
+    public Boolean CheckNumber(String no) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.rawQuery("select " + MOBILE_NO+ " from " + TABLE_SMS + " where " + MOBILE_NO + " = " + "'" + no + "'" , null);
-        return res;
+        if (res.getCount() == 0) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     public Cursor getPowerStatus(String no) {
