@@ -117,15 +117,18 @@ public class DbManager extends SQLiteOpenHelper {
     }
     public boolean getnumber(String no) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select * from " + TABLE_REG + " where " + MOBILE_NO + " = " + "'" + no + "'" , null);
-        if (res.getCount()==0)
-        {
+        Cursor res = db.rawQuery("select * from " + TABLE_REG + " where " + MOBILE_NO + " = " + "'" + no + "'", null);
+        if (res.getCount() == 0) {
             return false;
-        }else
-        {
+        } else {
             return true;
         }
 
+    }
+    public Cursor CheckNumber(String no) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("select " + MOBILE_NO+ " from " + TABLE_SMS + " where " + MOBILE_NO + " = " + "'" + no + "'" , null);
+        return res;
     }
 
     public Cursor getPowerStatus(String no) {

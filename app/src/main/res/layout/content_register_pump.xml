@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".Register_pump"
-    tools:showIn="@layout/app_bar_register_pump">
+    tools:showIn="@layout/app_bar_register_pump"
+    android:background="#5c5ac6">
 
     <EditText
         android:id="@+id/no_phn"
@@ -19,6 +20,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:ems="10"
+        android:textColor="#FFFFFF"
         android:inputType="textPersonName"
 
         app:layout_constraintBottom_toBottomOf="parent"
@@ -36,6 +38,7 @@
         android:layout_marginTop="8dp"
         android:text="REGISTER PUMP"
         android:textAlignment="center"
+        android:textColor="#FFFFFF"
         android:textSize="26dp"
         app:layout_constraintBottom_toTopOf="@+id/editText"
         app:layout_constraintTop_toTopOf="parent"
@@ -52,8 +55,9 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:textSize="12dp"
+        android:textSize="18dp"
 
+        android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.164"
@@ -72,6 +76,8 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:ems="10"
+
+        android:textColor="#FFFFFF"
         android:hint="Type your sheet id here..."
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
