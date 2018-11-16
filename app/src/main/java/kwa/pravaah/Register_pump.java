@@ -84,21 +84,13 @@ public class Register_pump extends AppCompatActivity
                     num1 = num.replace("+91", "0");//you can instead use Phone.NORMALIZED_NUMBER if you're using a high-enough API level
                 }
                 if (num1.length() == 11) {
-                    Cursor cursor=db.CheckNumber(num1);
-                    if(cursor.getCount()!=0) {
-                        cursor.moveToFirst();
-                        no = cursor.getString(cursor.getColumnIndex(db.MOBILE_NO));
 
-                        if (no != num1) {
-                            db.insertPumpDetails(num1, sheet);
-                            Intent i1 = new Intent(Register_pump.this, Register_pump.class);
-                            startActivity(i1);
-                            Toast.makeText(Register_pump.this, "inserted!!", Toast.LENGTH_LONG).show();
-                        } else
-                        {
-                            Toast.makeText(Register_pump.this, "Number Already registered!!!", Toast.LENGTH_SHORT).show();
-                        }
-                    }
+                    db.insertPumpDetails(num1, sheet);
+                    Intent i1 = new Intent(Register_pump.this, Register_pump.class);
+                    startActivity(i1);
+                    Toast.makeText(Register_pump.this, "inserted!!", Toast.LENGTH_LONG).show();
+
+
                 }
                 else
                 {
