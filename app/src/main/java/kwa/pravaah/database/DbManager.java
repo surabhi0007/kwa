@@ -123,17 +123,7 @@ public class DbManager extends SQLiteOpenHelper {
         return TIME_OFF;
 
     }
-    public boolean getnumber(String no) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select * from " + TABLE_REG + " where " + MOBILE_NO + " = " + "'" + no + "'", null);
-        if (res.getCount() == 0) {
-            return false;
-        } else {
-            return true;
-        }
-
-    }
-    public Boolean CheckNumber(String no) {
+       public Boolean CheckNumber(String no) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.rawQuery("select " + MOBILE_NO+ " from " + TABLE_SMS + " where " + MOBILE_NO + " = " + "'" + no + "'" , null);
         if (res.getCount() == 0) {
@@ -170,6 +160,12 @@ public class DbManager extends SQLiteOpenHelper {
         Cursor res = db.rawQuery("select "+PENDING_INTENT_ON + " , " + PENDING_INTENT_OFF + " from " + TABLE_SMS + " where " + ID + " = " + no , null);
         return res;
     }
+    public Cursor getnumber(String nm) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("select " + PHN_NO+ " from " + TABLE_REG + " where " + NAME_REG + " = " + "'" + nm + "'", null);
+         return  res;
+    }
+
 
 
     public void updatePumpStatus(String no, String pump) {
@@ -254,18 +250,18 @@ public class DbManager extends SQLiteOpenHelper {
         // returning lables
         return rows;
     }
-    public List<Integer> getPumpDetails(){
-        List<Integer> rows1 = new ArrayList<Integer>();
+    public List<String> getPumpDetails(){
+        List<String> rows1 = new ArrayList<String>();
 
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT "+ ID_REG +" FROM " + TABLE_REG, null);
+        Cursor cursor = db.rawQuery("SELECT "+ NAME_REG +" FROM " + TABLE_REG, null);
 
 
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {
-                rows1.add(cursor.getInt(0));
+                rows1.add(cursor.getString(0));
             } while (cursor.moveToNext());
         }
 

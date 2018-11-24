@@ -54,8 +54,8 @@ public class AddAlarm extends AppCompatActivity
     private DbManager db;
     boolean mFlag;
     Spinner spinner;
-    List<Integer> rows;
-    ArrayAdapter<Integer> dataAdapter;
+    List<String> rows;
+    ArrayAdapter<String> dataAdapter;
     TextView tv;
     String item;
 
@@ -102,153 +102,152 @@ public class AddAlarm extends AppCompatActivity
         loadSpinnerData();
 
         try {
-            bt_ON.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
 
-                    Calendar cal = Calendar.getInstance();
+                bt_ON.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
-                    cal.set(Calendar.HOUR_OF_DAY, setTime.getCurrentHour());
-                    cal.set(Calendar.MINUTE, setTime.getCurrentMinute());
-                    cal.set(Calendar.SECOND,00);
-
-
-                    if (cal.compareTo(now) <= 0) {
-                        //Today Set time passed, count to tomorrow
-                        cal.add(Calendar.DATE, 1);
-                    }
-                   String num = Phone.getText().toString();
-                    String num1;
-                    if(num.length()==10)
-                    {
-                        num1 = "0"+num;
-                    }
-                    else {
-                        num1 = num.replace("+91", "0");//you can instead use Phone.NORMALIZED_NUMBER if you're using a high-enough API level
-                    }
-                    if (num1.length()==11)
-                    {
-                        String time=cal.getTime().toString();
-                        time=time.substring(11,19) ;
-
-                        Toast.makeText(AddAlarm.this, "Alarm is set @" + time, Toast.LENGTH_SHORT).show();
-                        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-
-
-                        Intent myIntent = new Intent(AddAlarm.this, AlarmReceiver.class);
-
-
-                        String PhNo = num1+",2";
-                    myIntent.putExtra("Number", PhNo);
-
-                    int alarmID = (int) cal.getTimeInMillis();
-                    PendingIntent pendingIntent = PendingIntent.getBroadcast(AddAlarm.this, alarmID, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-
-                    assert manager != null;
-                    //manager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
-
-                   /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        manager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,cal.getTimeInMillis(),pendingIntent);
-                    }*/
-                    if(android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-                        manager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), 24 * 60 * 60 * 1000, pendingIntent);
-                    }else if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                        manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), 24 * 60 * 60 * 1000, pendingIntent);
-                    }
-
-                        Toast.makeText(AddAlarm.this, "Shift set", Toast.LENGTH_SHORT).show();
-                    String alarmID_to_on= String.valueOf(alarmID);
-
-                    GAlarm_on = alarmID_to_on;
-                    if(mFlag) {
-
-
-                        db.insertUserDetails(num1,Name,POWERON , PUMPOFF, alarmID_to_on, intent_off,time,time_off);
-
-                    }
-                    else
-                    {
-                        db.insertUserDetails(num1,Name, POWERON, PUMPOFF, alarmID_to_on, intent_off,time,time_off);
-
-                    }
-                }
-                else  {
-                         Intent in = new Intent(AddAlarm.this,AddAlarm.class);
-                        startActivity(in);
-                    }
-                }
-
-            });
-
-            bt_OFF.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-
-                    String num = Phone.getText().toString();
-                    String num1;
-                    if (num.length() == 10) {
-                        num1 = "0" + num;
-                    } else {
-                        num1 = num.replace("+91", "0");//you can instead use Phone.NORMALIZED_NUMBER if you're using a high-enough API level
-                    }
-                    if (num1.length() == 11) {
                         Calendar cal = Calendar.getInstance();
-
 
                         cal.set(Calendar.HOUR_OF_DAY, setTime.getCurrentHour());
                         cal.set(Calendar.MINUTE, setTime.getCurrentMinute());
                         cal.set(Calendar.SECOND, 00);
 
+
+
+
                         if (cal.compareTo(now) <= 0) {
                             //Today Set time passed, count to tomorrow
                             cal.add(Calendar.DATE, 1);
                         }
+                        String num = Phone.getText().toString();
 
-                        String time = cal.getTime().toString();
-                        time = time.substring(11, 19);
-                        Toast.makeText(AddAlarm.this, "Alarm is set @" + time, Toast.LENGTH_SHORT).show();
-
-
-                        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-
-
-                        Intent myIntent = new Intent(AddAlarm.this, AlarmReceiver.class);
-
-
-                        String PhNo = num1 + ",3";
-                        myIntent.putExtra("Number", PhNo);
-
-                        int alarmID = (int) cal.getTimeInMillis();
-                        PendingIntent pendingIntent = PendingIntent.getBroadcast(AddAlarm.this, alarmID, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-
-                        assert manager != null;
-                        if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-                            manager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), 24 * 60 * 60 * 1000, pendingIntent);
-                        } else if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                            manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), 24 * 60 * 60 * 1000, pendingIntent);
+                        String num1;
+                        if (num.length() == 10) {
+                            num1 = "0" + num;
+                        } else {
+                            num1 = num.replace("+91", "0");//you can instead use Phone.NORMALIZED_NUMBER if you're using a high-enough API level
                         }
+                        if (num1.length() == 11) {
+                            String time = cal.getTime().toString();
+                            time = time.substring(11, 19);
 
-                        Toast.makeText(AddAlarm.this, "Shift set", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AddAlarm.this, "Alarm is set @" + time, Toast.LENGTH_SHORT).show();
+                            AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
-                        String alarmID_to_off = String.valueOf(alarmID);
 
-                        db.addPendingIntent_OFF(GAlarm_on, alarmID_to_off);
-                        db.addTime_OFF(GAlarm_on, time);
-                        Intent i1 = new Intent(AddAlarm.this, Home.class);
-                        startActivity(i1);
+                            Intent myIntent = new Intent(AddAlarm.this, AlarmReceiver.class);
 
-                    } else {
-                        Intent in = new Intent(AddAlarm.this,AddAlarm.class);
-                        startActivity(in);
+
+                            String PhNo = num1 + ",2";
+                            myIntent.putExtra("Number", PhNo);
+
+                            int alarmID = (int) cal.getTimeInMillis();
+                            PendingIntent pendingIntent = PendingIntent.getBroadcast(AddAlarm.this, alarmID, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+                            assert manager != null;
+                            //manager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+
+                   /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        manager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,cal.getTimeInMillis(),pendingIntent);
+                    }*/
+                            if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+                                manager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), 24 * 60 * 60 * 1000, pendingIntent);
+                            } else if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                                manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), 24 * 60 * 60 * 1000, pendingIntent);
+                            }
+
+                            Toast.makeText(AddAlarm.this, "Shift set", Toast.LENGTH_SHORT).show();
+                            String alarmID_to_on = String.valueOf(alarmID);
+
+                            GAlarm_on = alarmID_to_on;
+                            if (mFlag) {
+
+
+                                db.insertUserDetails(num1, Name, POWERON, PUMPOFF, alarmID_to_on, intent_off, time, time_off);
+
+                            } else {
+                                db.insertUserDetails(num1, Name, POWERON, PUMPOFF, alarmID_to_on, intent_off, time, time_off);
+
+                            }
+                        } else {
+                            Intent in = new Intent(AddAlarm.this, AddAlarm.class);
+                            startActivity(in);
+                        }
                     }
-                }
+
+                });
+
+                bt_OFF.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
 
+                        String num = Phone.getText().toString();
 
-            });
+                        String num1;
+                        if (num.length() == 10) {
+                            num1 = "0" + num;
+                        } else {
+                            num1 = num.replace("+91", "0");//you can instead use Phone.NORMALIZED_NUMBER if you're using a high-enough API level
+                        }
+                        if (num1.length() == 11) {
+                            Calendar cal = Calendar.getInstance();
+
+
+                            cal.set(Calendar.HOUR_OF_DAY, setTime.getCurrentHour());
+                            cal.set(Calendar.MINUTE, setTime.getCurrentMinute());
+                            cal.set(Calendar.SECOND, 00);
+
+                            if (cal.compareTo(now) <= 0) {
+                                //Today Set time passed, count to tomorrow
+                                cal.add(Calendar.DATE, 1);
+                            }
+
+                            String time = cal.getTime().toString();
+                            time = time.substring(11, 19);
+                            Toast.makeText(AddAlarm.this, "Alarm is set @" + time, Toast.LENGTH_SHORT).show();
+
+
+                            AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+
+                            Intent myIntent = new Intent(AddAlarm.this, AlarmReceiver.class);
+
+
+                            String PhNo = num1 + ",3";
+                            myIntent.putExtra("Number", PhNo);
+
+                            int alarmID = (int) cal.getTimeInMillis();
+                            PendingIntent pendingIntent = PendingIntent.getBroadcast(AddAlarm.this, alarmID, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+                            assert manager != null;
+                            if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+                                manager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), 24 * 60 * 60 * 1000, pendingIntent);
+                            } else if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                                manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), 24 * 60 * 60 * 1000, pendingIntent);
+                            }
+
+                            Toast.makeText(AddAlarm.this, "Shift set", Toast.LENGTH_SHORT).show();
+
+                            String alarmID_to_off = String.valueOf(alarmID);
+
+                            db.addPendingIntent_OFF(GAlarm_on, alarmID_to_off);
+                            db.addTime_OFF(GAlarm_on, time);
+                            Intent i1 = new Intent(AddAlarm.this, Home.class);
+                            startActivity(i1);
+
+                        } else {
+                            Intent in = new Intent(AddAlarm.this, AddAlarm.class);
+                            startActivity(in);
+                        }
+                    }
+
+
+                });
+
         }
         catch (NullPointerException e) {
             Toast.makeText(this, "Null value", Toast.LENGTH_SHORT).show();
@@ -335,6 +334,18 @@ public class AddAlarm extends AppCompatActivity
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        item = parent.getItemAtPosition(position).toString();
+        Cursor cursor=db.getnumber(item);
+        if(cursor.getCount()!=0) {
+
+            cursor.moveToFirst();
+            String name =  cursor.getString(cursor.getColumnIndex(db.PHN_NO));
+
+            Phone.setText(name);
+        }
+        // Showing selected spinner item
+        Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_LONG).show();
+
 
     }
 
@@ -349,7 +360,7 @@ public class AddAlarm extends AppCompatActivity
         rows = db.getPumpDetails();
 
         // Creating adapter for spinner
-        dataAdapter = new ArrayAdapter<Integer>(this,
+        dataAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, rows);
 
         // Drop down layout style - list view with radio button
