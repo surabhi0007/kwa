@@ -23,18 +23,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.PopupWindow;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.Calendar;
+import java.util.List;
 
 import kwa.pravaah.database.DbManager;
 
 public class AddAlarm extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener , AdapterView.OnItemSelectedListener {
     private String POWERON = "ON";
     private String PUMPOFF = "OFF";
     private String intent_off = "000";
@@ -48,6 +53,11 @@ public class AddAlarm extends AppCompatActivity
     EditText Phone;
     private DbManager db;
     boolean mFlag;
+    Spinner spinner;
+    List<Integer> rows;
+    ArrayAdapter<Integer> dataAdapter;
+    TextView tv;
+    String item;
 
 
     @Override
@@ -65,6 +75,11 @@ public class AddAlarm extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        spinner = (Spinner) findViewById(R.id.spinner);
+        spinner.setOnItemSelectedListener(this);
+
+
 
         db=new DbManager(this);
         final int mValue = db.numOfRows();
@@ -84,6 +99,7 @@ public class AddAlarm extends AppCompatActivity
         setTime.setCurrentMinute(now.get(Calendar.MINUTE));
 
         Phone = findViewById(R.id.Phone);
+        loadSpinnerData();
 
         try {
             bt_ON.setOnClickListener(new View.OnClickListener() {
@@ -317,55 +333,30 @@ public class AddAlarm extends AppCompatActivity
     }
 
 
-    public void contactPickerOnClick(View view) {
-        Intent contactPickerIntent = new Intent(Intent.ACTION_PICK,
-                ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
-        startActivityForResult(contactPickerIntent, CONTACT_PICK);
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
     }
 
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
 
-
-        if (resultCode == RESULT_OK) {
-            // Check for the request code, we might be usign multiple startActivityForReslut
-            switch (requestCode) {
-                case CONTACT_PICK:
-                    contactPicked(data);
-                    break;
-            }
-        } else {
-            Log.e("MainActivity", "Failed to pick contact");
-        }
     }
+    private void loadSpinnerData() {
+        // database handler
 
+        // Spinner Drop down elements
+        rows = db.getPumpDetails();
 
-    private void contactPicked(Intent data) {
-        Cursor cursor = null;
-        try {
-            String name = null;
-            // getData() method will have the Content Uri of the selected contact
-            Uri uri = data.getData();
-            //Query the content uri
-            cursor = getContentResolver().query(uri, null, null, null, null);
-            cursor.moveToFirst();
-            // column index of the phone number
-            int phoneIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
-            // column index of the contact name
-            int nameIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
-            PhoneNo = cursor.getString(phoneIndex);
-            Name = cursor.getString(nameIndex);
-            // Set the value to the textviews
-            //textView1.setText(name);
-            /*if (PhoneNo.length() == 13)
-                PhoneNo = PhoneNo.substring(3, 13);
-            else if (PhoneNo.length() == 14)
-                PhoneNo= PhoneNo.substring(4,14);
-*/
+        // Creating adapter for spinner
+        dataAdapter = new ArrayAdapter<Integer>(this,
+                android.R.layout.simple_spinner_item, rows);
 
-            Phone.setText(PhoneNo);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        // Drop down layout style - list view with radio button
+        dataAdapter
+                .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // attaching data adapter to spinner
+        spinner.setAdapter(dataAdapter);
     }
 }

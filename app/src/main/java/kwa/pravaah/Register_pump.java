@@ -27,6 +27,7 @@ import kwa.pravaah.database.DbManager;
 public class Register_pump extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private static final String TAG = "KWATest: RegPump";
     EditText Phon , sheet_id;
     private DbManager db;
     boolean mFlag;
@@ -76,7 +77,7 @@ public class Register_pump extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 num = Phon.getText().toString();
-
+                String name = nm.getText().toString();
                 String num1;
                 if (num.length() == 10) {
                     num1 = "0" + num;
@@ -84,15 +85,20 @@ public class Register_pump extends AppCompatActivity
                     num1 = num.replace("+91", "0");//you can instead use Phone.NORMALIZED_NUMBER if you're using a high-enough API level
                 }
                 if (num1.length() == 11) {
-                    if (!db.CheckNumber(num1)) {
-                        db.insertPumpDetails(num1, sheet);
+                    if (mFlag) {
+                        db.insertPumpDetails(num1, name, sheet);
+                        Log.i(TAG,"Db : inserted!");
                         Intent i1 = new Intent(Register_pump.this, Register_pump.class);
                         startActivity(i1);
                         Toast.makeText(Register_pump.this, "inserted!!", Toast.LENGTH_LONG).show();
-                    }
-                    else
-                        Toast.makeText(Register_pump.this, "Another no!!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        db.insertPumpDetails(num1, name, sheet);
+                        Intent i1 = new Intent(Register_pump.this, Register_pump.class);
+                        Log.i(TAG,"Db : inserted!");
+                        startActivity(i1);
+                        Toast.makeText(Register_pump.this, "inserted!!", Toast.LENGTH_LONG).show();
 
+                    }
                 }
                 else
                 {

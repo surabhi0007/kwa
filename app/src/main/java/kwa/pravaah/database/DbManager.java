@@ -6,18 +6,23 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DbManager extends SQLiteOpenHelper {
+    private static final String TAG = "KWATest: DBmanager ";
 
     public static final String DATABASE_NAME = "KWA.db";
     public static final String TABLE_SMS = "sms_table";
     public static final String ID="id";
+    public static final String ID_REG="id_reg";
     public static final String TABLE_REG = "reg_table";
     public static final String SL_NO = "sl_no";
     public static final String MOBILE_NO = "phone";
+    public static final String PHN_NO = "phone_reg";
+    public static final String NAME_REG = "name_reg";
     public static final String NAME = "name";
     public static final String POWER = "power";
     public static final String PUMP = "pump";
@@ -45,9 +50,11 @@ public class DbManager extends SQLiteOpenHelper {
                 + TIME_ON +" text unique,"
                 + TIME_OFF +" text unique )");
 
-        db.execSQL("create table "+ TABLE_REG + "(" + ID + " integer  ,"
-                + MOBILE_NO + "text primary key  ,"
+        db.execSQL("create table "+ TABLE_REG + "(" + ID_REG + " integer primary key autoincrement ,"
+                + PHN_NO + " text unique  not null ,"
+                + NAME_REG + " text ,"
                 + SHEET_ID + " text ) " );
+        Log.i(TAG,"db : created");
     }
 
     @Override
@@ -85,15 +92,17 @@ public class DbManager extends SQLiteOpenHelper {
         return true;
     }
 
-    public boolean insertPumpDetails(String no,String sheetid) {
+    public boolean insertPumpDetails(String num,String name,String sheetid) {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(MOBILE_NO, no);
+        contentValues.put(PHN_NO, num);
+        contentValues.put(NAME_REG, name);
         contentValues.put(SHEET_ID, sheetid);
 
         db.insert(TABLE_REG, null, contentValues);
+        Log.i(TAG,"db : succesful");
         return true;
     }
 
@@ -245,5 +254,26 @@ public class DbManager extends SQLiteOpenHelper {
         // returning lables
         return rows;
     }
+    public List<Integer> getPumpDetails(){
+        List<Integer> rows1 = new ArrayList<Integer>();
 
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT "+ ID_REG +" FROM " + TABLE_REG, null);
+
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                rows1.add(cursor.getInt(0));
+            } while (cursor.moveToNext());
+        }
+
+        // closing connection
+        cursor.close();
+        db.close();
+
+        // returning lables
+        return rows1;
+    }
 }
