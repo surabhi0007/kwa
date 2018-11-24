@@ -43,10 +43,9 @@ public class DbManager extends SQLiteOpenHelper {
                 + PENDING_INTENT_ON +" text,"
                 + PENDING_INTENT_OFF +" text,"
                 + TIME_ON +" text unique,"
-                + TIME_OFF +" text unique," +
-                "FOREIGN KEY ("+ MOBILE_NO +") REFERENCES " + TABLE_REG + "(" + MOBILE_NO+") )");
+                + TIME_OFF +" text unique )");
 
-        db.execSQL("create table "+ TABLE_REG + "(" + ID + " integer autoincrement ,"
+        db.execSQL("create table "+ TABLE_REG + "(" + ID + " integer  ,"
                 + MOBILE_NO + "text primary key  ,"
                 + SHEET_ID + " text ) " );
     }
