@@ -44,7 +44,7 @@ public class AddAlarm extends AppCompatActivity
     private String PUMPOFF = "OFF";
     private String intent_off = "000";
     private String time_off = "000";
-    public static String PhoneNo, Name;
+    public static String  Name,phn;
     public static String Gtime, GAlarm_on;
 
     private static final int CONTACT_PICK = 1;
@@ -57,7 +57,7 @@ public class AddAlarm extends AppCompatActivity
     List<String> rows;
     ArrayAdapter<String> dataAdapter;
     TextView tv;
-    String item;
+
 
 
     @Override
@@ -100,6 +100,7 @@ public class AddAlarm extends AppCompatActivity
 
         tv = findViewById(R.id.name);
         Phone = findViewById(R.id.Phone);
+
         loadSpinnerData();
 
         try {
@@ -121,16 +122,10 @@ public class AddAlarm extends AppCompatActivity
                             //Today Set time passed, count to tomorrow
                             cal.add(Calendar.DATE, 1);
                         }
-                        String num = Phone.getText().toString();
-                        String nm = tv.getText().toString();
+                       // String num = Phone.getText().toString();
+                      //  String nm = tv.getText().toString();
 
-                        String num1;
-                        if (num.length() == 10) {
-                            num1 = "0" + num;
-                        } else {
-                            num1 = num.replace("+91", "0");//you can instead use Phone.NORMALIZED_NUMBER if you're using a high-enough API level
-                        }
-                        if (num1.length() == 11) {
+
                             String time = cal.getTime().toString();
                             time = time.substring(11, 19);
 
@@ -141,7 +136,7 @@ public class AddAlarm extends AppCompatActivity
                             Intent myIntent = new Intent(AddAlarm.this, AlarmReceiver.class);
 
 
-                            String PhNo = num1 + ",2";
+                            String PhNo = phn + ",2";
                             myIntent.putExtra("Number", PhNo);
 
                             int alarmID = (int) cal.getTimeInMillis();
@@ -167,16 +162,13 @@ public class AddAlarm extends AppCompatActivity
                             if (mFlag) {
 
 
-                                db.insertUserDetails(num1, nm, POWERON, PUMPOFF, alarmID_to_on, intent_off, time, time_off);
+                                db.insertUserDetails(phn, Name, POWERON, PUMPOFF, alarmID_to_on, intent_off, time, time_off);
 
                             } else {
-                                db.insertUserDetails(num1, nm, POWERON, PUMPOFF, alarmID_to_on, intent_off, time, time_off);
+                                db.insertUserDetails(phn, Name, POWERON, PUMPOFF, alarmID_to_on, intent_off, time, time_off);
 
                             }
-                        } else {
-                            Intent in = new Intent(AddAlarm.this, AddAlarm.class);
-                            startActivity(in);
-                        }
+
                     }
 
                 });
@@ -186,15 +178,8 @@ public class AddAlarm extends AppCompatActivity
                     public void onClick(View v) {
 
 
-                        String num = Phone.getText().toString();
 
-                        String num1;
-                        if (num.length() == 10) {
-                            num1 = "0" + num;
-                        } else {
-                            num1 = num.replace("+91", "0");//you can instead use Phone.NORMALIZED_NUMBER if you're using a high-enough API level
-                        }
-                        if (num1.length() == 11) {
+
                             Calendar cal = Calendar.getInstance();
 
 
@@ -218,7 +203,7 @@ public class AddAlarm extends AppCompatActivity
                             Intent myIntent = new Intent(AddAlarm.this, AlarmReceiver.class);
 
 
-                            String PhNo = num1 + ",3";
+                            String PhNo = phn + ",3";
                             myIntent.putExtra("Number", PhNo);
 
                             int alarmID = (int) cal.getTimeInMillis();
@@ -241,10 +226,7 @@ public class AddAlarm extends AppCompatActivity
                             Intent i1 = new Intent(AddAlarm.this, Home.class);
                             startActivity(i1);
 
-                        } else {
-                            Intent in = new Intent(AddAlarm.this, AddAlarm.class);
-                            startActivity(in);
-                        }
+
                     }
 
 
@@ -323,9 +305,11 @@ public class AddAlarm extends AppCompatActivity
         }
         else if (id == R.id.nav_EXIT)
         {
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
 
-            finish();
-            System.exit(0);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -336,17 +320,17 @@ public class AddAlarm extends AppCompatActivity
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        item = parent.getItemAtPosition(position).toString();
+         String item = parent.getItemAtPosition(position).toString();
         Cursor cursor=db.getnumber(item);
         if(cursor.getCount()!=0) {
 
             cursor.moveToFirst();
-            String phn =  cursor.getString(cursor.getColumnIndex(db.PHN_NO));
-
+            phn =  cursor.getString(cursor.getColumnIndex(db.PHN_NO));
+            Name = item;
 
 
             Phone.setText(phn);
-            tv.setText(item);
+            tv.setText(Name);
         }
         // Showing selected spinner item
         Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_LONG).show();

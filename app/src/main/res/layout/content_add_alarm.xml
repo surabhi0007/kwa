@@ -34,6 +34,7 @@
                 android:layout_height="26dp"
                 android:textColor="#FF0000"
                 android:textStyle="bold|italic"
+                android:textAlignment="center"
                  />
 
             <TextView
@@ -42,6 +43,7 @@
                 android:layout_height="26dp"
                 android:textColor="#FF0000"
                 android:textStyle="bold"
+                android:textAlignment="center"
                  />
 
 

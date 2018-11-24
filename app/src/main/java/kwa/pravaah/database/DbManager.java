@@ -123,14 +123,10 @@ public class DbManager extends SQLiteOpenHelper {
         return TIME_OFF;
 
     }
-       public Boolean CheckNumber(String no) {
+       public Cursor getsheet(String no) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select " + MOBILE_NO+ " from " + TABLE_SMS + " where " + MOBILE_NO + " = " + "'" + no + "'" , null);
-        if (res.getCount() == 0) {
-            return false;
-        } else {
-            return true;
-        }
+        Cursor res = db.rawQuery("select " + SHEET_ID+ " from " + TABLE_REG + " where " + PHN_NO + " = " + "'" + no + "'" , null);
+       return res;
     }
 
     public Cursor getPowerStatus(String no) {
@@ -214,6 +210,7 @@ public class DbManager extends SQLiteOpenHelper {
         db.execSQL("delete from " + TABLE_SMS+ " WHERE "+ID+"='"+data+"'");
         db.close();
     }
+
 
     public Cursor getDataUsername( String id) {
         SQLiteDatabase db = this.getReadableDatabase();

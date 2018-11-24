@@ -1,6 +1,7 @@
 package kwa.pravaah.database;
 
 import android.app.ProgressDialog;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -33,7 +34,9 @@ public class Pushdata extends AsyncTask<String, Void, String> {
 
 
     public AsyncResponse delegate = null;
-
+    DbManager db;
+    JSONObject postDataParams;
+    URL url;
     public Pushdata(AsyncResponse asyncResponse) {
         delegate = asyncResponse;
     }
@@ -45,29 +48,19 @@ public class Pushdata extends AsyncTask<String, Void, String> {
 
         try{
 
+            String no = SMSListener.num;
+            Cursor cursor=db.getsheet(no);
+            if(cursor.getCount()!=0) {
 
-            URL url = new URL("https://script.google.com/macros/s/AKfycbyECzKI9C68PKXE72G-PyZytMoBHQu69qWgZ_CA1J8SPdm3irw/exec");
-            //JSONObject postDataParams = new JSONObject();
-            //String id= "1nrI7jm4D7VvV7e_u1A2VJP5T2el16JTAd0UvNw8vdGA";
-          //  URL url = new URL("https://script.google.com/macros/s/AKfycbwWlckFBk9nif9KHG2J5s7-S9RkkUnoUSo-HtnGU_tql2-LA_I/exec");
-            JSONObject postDataParams = new JSONObject();
+                cursor.moveToFirst();
+                String id = cursor.getString(cursor.getColumnIndex(db.SHEET_ID));
 
-           // String no = SMSListener.no;
-            /*if (no == "8547155003") {*/
-                String id = "1ztDzwD-mkA3XOXXC_kju8kq-hf4BUZ3mS4nkqwOrU-Q";
+                 url = new URL("https://script.google.com/macros/s/AKfycbyECzKI9C68PKXE72G-PyZytMoBHQu69qWgZ_CA1J8SPdm3irw/exec");
+                JSONObject postDataParams = new JSONObject();
 
-                postDataParams.put("number", arg0[0]);
-                postDataParams.put("power", arg0[1]);
-                postDataParams.put("pump", arg0[2]);
-                postDataParams.put("err", arg0[3]);
-                postDataParams.put("eventhrs", arg0[4]);
-                postDataParams.put("auto", arg0[5]);
-                postDataParams.put("tm", arg0[6]);
-                postDataParams.put("id", id);
-          /*  }
-            else if (no == "8848883046")
-            {
-                String id = "1XxoIXd3tKI48m_MYug2wu1gVgf5vpK_ximIGvfYxZgg";
+
+               // String id = "1ztDzwD-mkA3XOXXC_kju8kq-hf4BUZ3mS4nkqwOrU-Q";
+
                 postDataParams.put("number", arg0[0]);
                 postDataParams.put("power", arg0[1]);
                 postDataParams.put("pump", arg0[2]);
@@ -78,64 +71,47 @@ public class Pushdata extends AsyncTask<String, Void, String> {
                 postDataParams.put("id", id);
 
 
-
+                Log.e("params", postDataParams.toString());
             }
-            else if(no == "8943444242")
-            {
-                String id = "1UBfOVq3d_2V_MbPhhS1_SxMwGXzHHwrTsin_hOu07hU";
-                postDataParams.put("number", arg0[0]);
-                postDataParams.put("power", arg0[1]);
-                postDataParams.put("pump", arg0[2]);
-                postDataParams.put("err", arg0[3]);
-                postDataParams.put("eventhrs", arg0[4]);
-                postDataParams.put("auto", arg0[5]);
-                postDataParams.put("tm", arg0[6]);
-                postDataParams.put("id", id);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setReadTimeout(15000 /* milliseconds */);
+                conn.setConnectTimeout(15000 /* milliseconds */);
+                conn.setRequestMethod("POST");
+                conn.setDoInput(true);
+                conn.setDoOutput(true);
 
+                OutputStream os = conn.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(
+                        new OutputStreamWriter(os, "UTF-8"));
+                writer.write(getPostDataString(postDataParams));
 
-            }*/
+                writer.flush();
+                writer.close();
+                os.close();
 
+               int responseCode = conn.getResponseCode();
 
-            Log.e("params",postDataParams.toString());
+                if (responseCode == HttpsURLConnection.HTTP_OK) {
 
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(15000 /* milliseconds */);
-            conn.setConnectTimeout(15000 /* milliseconds */);
-            conn.setRequestMethod("POST");
-            conn.setDoInput(true);
-            conn.setDoOutput(true);
+                    BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    StringBuffer sb = new StringBuffer("");
+                    String line = "";
 
-            OutputStream os = conn.getOutputStream();
-            BufferedWriter writer = new BufferedWriter(
-                    new OutputStreamWriter(os, "UTF-8"));
-            writer.write(getPostDataString(postDataParams));
+                    while ((line = in.readLine()) != null) {
 
-            writer.flush();
-            writer.close();
-            os.close();
+                        sb.append(line);
+                        break;
+                    }
 
-            int responseCode=conn.getResponseCode();
+                    in.close();
+                    return sb.toString();
 
-            if (responseCode == HttpsURLConnection.HTTP_OK) {
-
-                BufferedReader in=new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                StringBuffer sb = new StringBuffer("");
-                String line="";
-
-                while((line = in.readLine()) != null) {
-
-                    sb.append(line);
-                    break;
+                } else {
+                    return new String("false : " + responseCode);
                 }
-
-                in.close();
-                return sb.toString();
-
             }
-            else {
-                return new String("false : "+responseCode);
-            }
-        }
+
+
         catch(Exception e){
             return new String("Exception: " + e.getMessage());
         }

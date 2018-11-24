@@ -23,7 +23,7 @@ import kwa.pravaah.model.message;
 public class SMSListener extends BroadcastReceiver {
     private static final String TAG = "KWATest: smslistener";
 
-   public static String no;
+   public static String num;
     String pwr;
     String pmp;
     @Override
@@ -58,8 +58,8 @@ public class SMSListener extends BroadcastReceiver {
                         Toast.makeText(context, "message received", Toast.LENGTH_SHORT).show();
 
                         DbManager dbManager = new DbManager(context);
-                        no = message.getSender().toString();
-                        no = no.replace("+91", "0");
+                        String no = message.getSender().toString();
+                        num = no.replace("+91", "0");
                       //  no = no.substring(3,13);
                         String pow = message.getPower().toString();
                         String pump = message.getPump().toString();
