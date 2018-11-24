@@ -84,7 +84,7 @@ public class Register_pump extends AppCompatActivity
                 } else {
                     num1 = num.replace("+91", "0");//you can instead use Phone.NORMALIZED_NUMBER if you're using a high-enough API level
                 }
-                if (num1.length() == 11) {
+                if (num1.length() >= 11) {
                     if (mFlag) {
                         db.insertPumpDetails(num1, name, sheet);
                         Log.i(TAG,"Db : inserted!");

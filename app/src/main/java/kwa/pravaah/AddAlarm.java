@@ -50,7 +50,7 @@ public class AddAlarm extends AppCompatActivity
     private static final int CONTACT_PICK = 1;
     TimePicker setTime;
     Button bt_ON, bt_OFF;
-    EditText Phone;
+    TextView Phone;
     private DbManager db;
     boolean mFlag;
     Spinner spinner;
@@ -98,6 +98,7 @@ public class AddAlarm extends AppCompatActivity
         setTime.setCurrentHour(now.get(Calendar.HOUR_OF_DAY));
         setTime.setCurrentMinute(now.get(Calendar.MINUTE));
 
+        tv = findViewById(R.id.name);
         Phone = findViewById(R.id.Phone);
         loadSpinnerData();
 
@@ -121,6 +122,7 @@ public class AddAlarm extends AppCompatActivity
                             cal.add(Calendar.DATE, 1);
                         }
                         String num = Phone.getText().toString();
+                        String nm = tv.getText().toString();
 
                         String num1;
                         if (num.length() == 10) {
@@ -165,10 +167,10 @@ public class AddAlarm extends AppCompatActivity
                             if (mFlag) {
 
 
-                                db.insertUserDetails(num1, Name, POWERON, PUMPOFF, alarmID_to_on, intent_off, time, time_off);
+                                db.insertUserDetails(num1, nm, POWERON, PUMPOFF, alarmID_to_on, intent_off, time, time_off);
 
                             } else {
-                                db.insertUserDetails(num1, Name, POWERON, PUMPOFF, alarmID_to_on, intent_off, time, time_off);
+                                db.insertUserDetails(num1, nm, POWERON, PUMPOFF, alarmID_to_on, intent_off, time, time_off);
 
                             }
                         } else {
@@ -339,9 +341,12 @@ public class AddAlarm extends AppCompatActivity
         if(cursor.getCount()!=0) {
 
             cursor.moveToFirst();
-            String name =  cursor.getString(cursor.getColumnIndex(db.PHN_NO));
+            String phn =  cursor.getString(cursor.getColumnIndex(db.PHN_NO));
 
-            Phone.setText(name);
+
+
+            Phone.setText(phn);
+            tv.setText(item);
         }
         // Showing selected spinner item
         Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_LONG).show();
