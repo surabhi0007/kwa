@@ -31,13 +31,17 @@
             <TextView
                 android:id="@+id/name"
                 android:layout_width="match_parent"
-                android:layout_height="17dp"
+                android:layout_height="26dp"
+                android:textColor="#FF0000"
+                android:textStyle="bold|italic"
                  />
 
             <TextView
                 android:id="@+id/Phone"
                 android:layout_width="match_parent"
-                android:layout_height="17dp"
+                android:layout_height="26dp"
+                android:textColor="#FF0000"
+                android:textStyle="bold"
                  />
 
 
@@ -50,9 +54,9 @@
                 <LinearLayout
                     android:id="@+id/linear_layout"
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
+                    android:layout_height="95dp"
                     android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
                     android:orientation="vertical"
                     android:padding="10dip"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -61,24 +65,21 @@
                     tools:layout_editor_absoluteX="0dp">
 
                     <!-- Text Label -->
-
                     <TextView
                         android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
+                        android:layout_height="29dp"
                         android:layout_marginTop="10dip"
+                        android:layout_marginBottom="5dp"
                         android:text="Select alarm:" />
 
                     <!-- Spinner Element -->
                     <Spinner
                         android:id="@+id/spinner"
                         android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="41dp"
 
                         />
-
                 </LinearLayout>
-
 
             </LinearLayout>
             <LinearLayout
