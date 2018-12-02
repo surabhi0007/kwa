@@ -31,11 +31,11 @@ public class Register_pump extends AppCompatActivity
     EditText Phon , sheet_id;
     private DbManager db;
     boolean mFlag;
-    Button reg;
+    Button reg, updateID;
     TextView nm;
-    String PhoneNo, Name;
+    String PhoneNo, Name ,sheet;
 
-    String no, num;
+    String  num1, num,name;
     private static final int CONTACT_PICK = 1;
 
     @Override
@@ -70,15 +70,17 @@ public class Register_pump extends AppCompatActivity
         Phon = findViewById(R.id.no_phn);
         nm = findViewById(R.id.name);
         sheet_id = findViewById(R.id.sheetid);
+        updateID = findViewById(R.id.UpsheetID);
 
-        final String sheet = sheet_id.getText().toString();
 
         reg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 num = Phon.getText().toString();
-                String name = nm.getText().toString();
-                String num1;
+                sheet = sheet_id.getText().toString();
+
+                name = nm.getText().toString();
+
                 if (num.length() == 10) {
                     num1 = "0" + num;
                 } else {
@@ -107,6 +109,34 @@ public class Register_pump extends AppCompatActivity
                     startActivity(i1);
                 }
 
+            }
+        });
+
+        updateID.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sheet = sheet_id.getText().toString();
+                num = Phon.getText().toString();
+                if (num.length() == 10) {
+                    num1 = "0" + num;
+                } else {
+                    num1 = num.replace("+91", "0");//you can instead use Phone.NORMALIZED_NUMBER if you're using a high-enough API level
+                }
+                if(db.Checknumber(num1))
+                {
+                    db.UpdateSheeetID(num1,sheet);
+                    Intent i1 = new Intent(Register_pump.this, Register_pump.class);
+                    startActivity(i1);
+
+                    Toast.makeText(Register_pump.this, "Successfully Updated!!!", Toast.LENGTH_SHORT).show();
+
+               }
+               else {
+                    Intent i1 = new Intent(Register_pump.this,Register_pump.class);
+                    startActivity(i1);
+
+                    Toast.makeText(Register_pump.this, "Register First!!!", Toast.LENGTH_SHORT).show();
+               }
             }
         });
 

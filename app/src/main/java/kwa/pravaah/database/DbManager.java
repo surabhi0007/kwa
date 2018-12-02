@@ -53,7 +53,7 @@ public class DbManager extends SQLiteOpenHelper {
         db.execSQL("create table "+ TABLE_REG + "(" + ID_REG + " integer primary key autoincrement ,"
                 + PHN_NO + " text unique  not null ,"
                 + NAME_REG + " text ,"
-                + SHEET_ID + " text ) " );
+                + SHEET_ID + " text  unique) " );
         Log.i(TAG,"db : created");
     }
 
@@ -116,6 +116,17 @@ public class DbManager extends SQLiteOpenHelper {
         return true;
 
     }
+    public boolean UpdateSheeetID(String no,String sheetid)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SHEET_ID, sheetid);
+        db.update(TABLE_REG,contentValues, PHN_NO + "=" + "'" +no+ "'",null);
+
+        Log.i(TAG,"sheetid : updated");
+        return true;
+
+    }
     public String getTime_off(String no , String intent_to_on )
     {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -161,7 +172,12 @@ public class DbManager extends SQLiteOpenHelper {
         Cursor res = db.rawQuery("select " + PHN_NO+ " from " + TABLE_REG + " where " + NAME_REG + " = " + "'" + nm + "'", null);
          return  res;
     }
+    public Boolean Checknumber(String no) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("select "+ PHN_NO +"  from " + TABLE_REG + " where " + PHN_NO + " = " + "'" + no + "'", null);
+       return  true;
 
+    }
 
 
     public void updatePumpStatus(String no, String pump) {
