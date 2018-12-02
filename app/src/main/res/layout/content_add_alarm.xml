@@ -88,37 +88,37 @@
 
                 <Button
                     android:id="@+id/ON"
-                    style="@style/Widget.AppCompat.Button.Borderless"
+                    style="@android:style/Widget.Material.Light.Button.Borderless.Small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
 
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="36dp"
                     android:layout_marginLeft="52dp"
                     android:layout_marginTop="8dp"
-                    android:layout_marginEnd="36dp"
-                    android:layout_marginBottom="8dp"
                     android:layout_weight="1"
+                    android:soundEffectsEnabled="true"
                     android:text="ON"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/OFF"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/Phone"
-                    app:layout_constraintVertical_bias="0.111"
-                    android:soundEffectsEnabled="true"/>
+                    app:layout_constraintVertical_bias="0.111" />
 
                 <Button
                     android:id="@+id/OFF"
-                    style="@style/Widget.AppCompat.Button.Borderless"
+                    style="@android:style/Widget.Material.Light.Button.Borderless.Small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="84dp"
                     android:layout_marginBottom="16dp"
+                    android:layout_marginEnd="84dp"
+                    android:layout_marginTop="8dp"
                     android:layout_weight="1"
+                    android:soundEffectsEnabled="true"
                     android:text="OFF"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/Phone"
-                    android:soundEffectsEnabled="true"/>
+                    app:layout_constraintTop_toBottomOf="@+id/Phone" />
             </LinearLayout>
 
         </LinearLayout>
